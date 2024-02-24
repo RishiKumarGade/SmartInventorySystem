@@ -5,6 +5,10 @@ const collaborativeSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    description:{
+        type:String,
+        default:""
+    },
     userId:{
         type:mongoose.Schema.Types.ObjectId,
         required:[true,'please provide a id'],

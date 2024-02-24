@@ -45,5 +45,7 @@ export const config = {
     '/prompt',
     '/orgs',
     '/orgs/:path*',
+    '/orgs/:path*/analysis',
+
   ]
 }

@@ -14,21 +14,14 @@ connect()
 export async function GET(request:NextRequest) {
     try {
         const userId = await getDataFromToken(request)
-        const accesses = await Access.find({userId:userId})
-        let collaborativeStorages = []
-        for(var i = 0; i < accesses.length; i++) {
-            await Collaborative.findOne({userId:userId,_id:accesses[i].collaborativeId}).then(collaborative =>{
-                collaborativeStorages.push(collaborative)
-                console.log(collaborativeStorages)
-            })
+        const reqBody = await request.json();
+        const {id} = reqBody;
+        const access = await Access.findOne({userId:userId,collaborativeId:id})
+        if(access){
+            return NextResponse.json({valid:true})
+        }else{
+            return NextResponse.json({valid:false,message:"youre not authorized"})
         }
-        
-
-            const response = NextResponse.json({
-                message:'Storages found',
-                collaborativeStorages:collaborativeStorages
-            })
-            return response
         } catch (error:any) {
             return NextResponse.json({error: error.message })
         }

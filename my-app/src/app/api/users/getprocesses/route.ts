@@ -15,6 +15,7 @@ export async function POST(request:NextRequest) {
     try {
         const reqBody = await request.json()
         const {id} = reqBody
+        
         const processes = await Process.find({collaborativeId:id})
             const response = NextResponse.json({
                 message:'sessions found',

@@ -1,6 +1,8 @@
 
 
 import { connect } from "@/dbConfig/dbConfig";
+import { getDataFromToken } from "@/helpers/getDataFromToken";
+import Access from "@/models/AccessSchema";
 import Collaborative from "@/models/Collaborative";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
@@ -9,6 +11,7 @@ connect()
 
 export async function GET(request:NextRequest) {
     try {
+        const userId = await getDataFromToken(request)
         const reqBody = await request.json()
         const {id,email} = reqBody
 
@@ -21,7 +24,7 @@ export async function GET(request:NextRequest) {
             })
             return response
         }
-        collaborativeStorage.readWriteAccess.push(user._id)
+        await Access.create({collaborativeId:id,userId:userId});
         await collaborativeStorage.save()
             const response = NextResponse.json({
                 message:'updated successfully',

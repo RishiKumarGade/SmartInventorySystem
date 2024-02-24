@@ -5,6 +5,7 @@ import checkSessionExistenceServerSide from "@/helpers/checkSessionExistenceServ
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import { getTokensToken } from "@/helpers/getTokensToken";
 import Collaborative from "@/models/Collaborative";
+import Access from "@/models/AccessSchema";
 import Login from "@/models/loginModel";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,7 +16,8 @@ export async function POST(request:NextRequest) {
         const userId = await getDataFromToken(request)
         const reqBody = await request.json();
         const {name} = reqBody;
-       await Collaborative.create({userId:userId,name:name});
+       const cb = await Collaborative.create({userId:userId,name:name});
+       await Access.create({collaborativeId:cb._id,userId:userId});
             const response = NextResponse.json({
                 message:'successfully created ',
             })

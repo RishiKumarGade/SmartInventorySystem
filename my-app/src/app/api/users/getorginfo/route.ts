@@ -4,24 +4,22 @@ import { connect } from "@/dbConfig/dbConfig";
 import checkSessionExistenceServerSide from "@/helpers/checkSessionExistenceServerSide";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import { getTokensToken } from "@/helpers/getTokensToken";
-import Process from "@/models/processSchema";
+import Item from "@/models/itemSchema";
+import Login from "@/models/loginModel";
 import { NextRequest, NextResponse } from "next/server";
 
 connect()
 
 export async function POST(request:NextRequest) {
     try {
-        const userId = await getDataFromToken(request)
-        const reqBody = await request.json();
-        const {id,processId} = reqBody;
-        const process = await Process.findOne({collaborativeId:id,_id:processId});
-        process.isDone = true;
-        process.completedAt = Date.now();
-        process.completedUser = userId;
-        await process.save();
+        const reqBody = await request.json()
+        const {id} = reqBody
+        const items = await Item.find({collaborativeId:id})
             const response = NextResponse.json({
-                message:'successfully completed process',
+                message:'sessions found',
+                items: items,
             })
+            
             return response
         } catch (error:any) {
             return NextResponse.json({error: error.message })
