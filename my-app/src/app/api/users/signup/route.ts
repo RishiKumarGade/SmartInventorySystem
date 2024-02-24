@@ -23,7 +23,6 @@ export async function POST(request:NextRequest){
             password:hashedPassword
         })
         const savedUser = await newUser.save()
-
         await sendEmail({email,emailType:'VERIFY',userId:savedUser._id})
         return NextResponse.json({message:'user created',success:true,savedUser})
 

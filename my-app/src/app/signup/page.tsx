@@ -75,7 +75,7 @@ export default function SignupPage() {
   }, [user]);
 
   return (
-    <>
+    <div>
       <h1 className="text-3xl mt-5 font-semibold">
         {loading ? "processing" : "Create new Account"}
       </h1>
@@ -149,6 +149,6 @@ export default function SignupPage() {
         </Link>
       </p>
 
-    </>
+    </div>
   );
 }

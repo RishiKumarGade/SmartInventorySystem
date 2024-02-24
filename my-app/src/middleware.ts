@@ -43,5 +43,7 @@ export const config = {
     '/test',
     '/otherlogins',
     '/prompt',
+    '/orgs',
+    '/orgs/:path*',
   ]
 }

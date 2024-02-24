@@ -48,7 +48,7 @@ export default function LoginPage() {
     }
   };
   return (
-    <>
+    <div>
       <h1 className="text-3xl font-semibold text-center">
         {loading ? "processing" : "LogIn"}
       </h1>
@@ -109,6 +109,6 @@ export default function LoginPage() {
           SignUp!
         </Link>
       </p>
-    </>
+    </div>
   );
 }
