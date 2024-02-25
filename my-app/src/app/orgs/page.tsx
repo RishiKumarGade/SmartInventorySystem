@@ -57,7 +57,7 @@ function Page() {
                       return (
                         <p key={stor._id}>
                           {" "}
-                          <Link href={`/orgs/${stor._id}`}>
+                          <Link onClick={e=>{localStorage.setItem('desc',stor.description)}} href={`/orgs/${stor._id}`}>
                             {stor.name}{" "}
                           </Link>{" "}
                         </p>

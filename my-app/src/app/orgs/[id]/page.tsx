@@ -26,7 +26,7 @@ function page({params}) {
     const [newProcess,setNewProcess] = useState({})
     const [items,setItems] = useState([]);
     const [processes,setProcesses]  = useState([]);
-
+    const [description,setDescription] = useState('')
     const joinRoom = () => {
         if (org_id !== "") {
             socket.emit("join_room", { id:org_id  });
@@ -40,6 +40,7 @@ function page({params}) {
     useEffect(()=>{
         getItems()
         getProcesses()
+        setDescription(localStorage.getItem('desc')|| '')
     },[])
 
 
