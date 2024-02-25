@@ -74,3 +74,11 @@
     @apply bg-background text-foreground;
   }
 } */
+html{
+  background:#0f172a ;
+  background-repeat: no-repeat;
+  background-size: cover; 
+  background-position: center;
+  height: 100vh;
+  color: #fff;
+}

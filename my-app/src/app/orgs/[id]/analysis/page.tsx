@@ -18,7 +18,7 @@ function Page() {
 
     const getProcesses = async()=>{
         try {
-            await axios.post('/api/users/getprocesses',{id:org_id}).then((res)=>{
+            await axios.post('/api/users/getcompletedprocesses',{id:org_id}).then((res)=>{
                 setCompletedProcesses(res.data.processes);
             })
         } catch (error) {

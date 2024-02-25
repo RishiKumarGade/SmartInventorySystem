@@ -35,7 +35,7 @@ async function Page() {
 
     const getProcesses = async()=>{
         try {
-            await axios.post('/api/users/getprocesses',{id:org_id}).then((res)=>{
+            await axios.post('/api/users/getremainingprocesses',{id:org_id}).then((res)=>{
                 setRemainingProcesses(res.data.processes);
             })
         } catch (error) {
@@ -47,6 +47,7 @@ async function Page() {
         try {
             await axios.post('/api/users/completeprocess',{id:org_id,processId:p_id}).then((res)=>{
                 console.log('successful')
+                getProcesses()
             })
         } catch (error) {
             
