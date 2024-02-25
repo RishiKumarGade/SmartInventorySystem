@@ -26,7 +26,10 @@ function page({params}) {
     const [newProcess,setNewProcess] = useState({})
     const [items,setItems] = useState([]);
     const [processes,setProcesses]  = useState([]);
+    const [processItems,setProcessItems] = useState([]);
     const [description,setDescription] = useState('')
+    const [processItem,setProcessItem] = useState({});
+    const [presets,setPresets] = useState([])
     const joinRoom = () => {
         if (org_id !== "") {
             socket.emit("join_room", { id:org_id  });
@@ -108,7 +111,7 @@ getItems()
             return
         }
         try {
-            await axios.post('/api/users/createprocess',{...newProcess,id:org_id}).then(()=>{
+            await axios.post('/api/users/createprocess',{newProcess,id:org_id,processItems:processItems}).then(()=>{
                 getProcesses()
             })
         } catch (error) {
@@ -116,7 +119,41 @@ getItems()
         }
     }
 
+    const addItemToProcess = ()=>{
+        try {
+            processItems.push(processItem)
+        } catch (error) {
+            
+        }finally{
+            setProcessItem(null)
+        }
+    }
     
+    const getPresets = async()=>{
+        try {
+        await axios.post('/api/users/getpresets',{type: newProcess.type,toCreate:newProcess.toCreate}).then((res)=>{
+            setPresets(res.data.presets)
+        })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const usePreset = (preset)=>{
+            presets.map((p)=>{
+                if(preset.type == p.type){
+                    for (let i = 0; i < preset.items.length; i++) {
+                        const item = preset.items[i];
+                        setProcessItems([...processItems,item])
+                    }
+                }
+            })
+    }
+
+
+    useEffect(()=>{
+        getPresets();
+    },[newProcess])
 
     return  <>  
 
@@ -176,10 +213,44 @@ getItems()
             return <div key={process._id} >{process.type}</div>
         })}
     </div>
-    <div>
 
-            <input type="text" onChange={(e)=>{setNewProcess({...newProcess,type:e.target.value})}} />
-            <button onClick={e=>{e.preventDefault();createProcess()}} >create a process</button>
+<div>
+
+<p>suggestion box</p>
+
+
+{presets && <>
+
+{presets.map((preset)=>{
+    return <div key={preset._id}>
+                <p> {preset.type} </p>
+            <button onClick={(e)=>{e.preventDefault();usePreset(preset)}} > use this preset </button>
+    </div>
+})}
+
+</>}
+
+</div>
+
+    <div className='text-black'>
+
+        {processItems.map((processItem)=>{
+            return <div key={processItem.type}>
+                <p>{processItem.type}</p>
+                <p>{processItem.count}</p>
+            </div>
+        })}
+
+            <input type="text" onChange={(e)=>{setNewProcess({...newProcess,type:e.target.value})}} /> <br />
+            <input type="text" onChange={(e)=>{setNewProcess({...newProcess,toCreate:e.target.value})}}  /><br />
+            <input type="number" onChange={(e)=>{setNewProcess({...newProcess,toCreatePrice:e.target.value})}}  /><br />
+            <input type="number" onChange={(e)=>{setNewProcess({...newProcess,toCreateCount:e.target.value})}}  /><br />
+
+            <input type="text" onChange={(e)=>{e.preventDefault();setProcessItem({...processItem,type:e.target.value})}}/><br />
+            <input type="number" onChange={(e)=>{e.preventDefault();setProcessItem({...processItem,count:e.target.value})}}/><br />
+            <button onClick={(e)=>{e.preventDefault();addItemToProcess()}} >add item to process </button><br />
+
+            <button onClick={e=>{e.preventDefault();createProcess()}} >create a process</button><br />
 
         </div>
               </div>

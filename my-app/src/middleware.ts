@@ -46,6 +46,6 @@ export const config = {
     '/orgs',
     '/orgs/:path*',
     '/orgs/:path*/analysis',
-
+    '/orgs/:path*/manage',
   ]
 }

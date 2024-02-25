@@ -39,6 +39,15 @@ const processchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  toCreate:{
+    type: String,
+  },
+  toCreateCount:{
+    type: Number,
+  },
+  toCreatePrice:{
+    type: Number,
+  }
 });
 
 const Process =
