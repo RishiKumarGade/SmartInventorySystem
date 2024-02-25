@@ -2,18 +2,32 @@
 import axios from 'axios'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { io } from "socket.io-client";
 
-async function Page() {
 
-   
 
-  let org_id:string ;
+const socket = io("http://localhost:3001")
+function Page() {
+
+
+  let org_id
 
 
   useEffect(() =>{
     org_id = location.pathname.split('/')[2]
     getProcesses()
   },[])
+
+  const joinRoom = () => {
+    if (org_id !== "") {
+        socket.emit("join_room", { id:org_id  });
+    }
+  }
+
+  useEffect(() =>{
+    joinRoom();
+  },[org_id])
+
 
     const [email,setEmail] = useState('');
 
@@ -43,9 +57,10 @@ async function Page() {
         }
     }
 
-    const completeProcess = async(p_id)=>{
+    const completeProcess = async(p_id,o_id)=>{
+        o_id =  location.pathname.split('/')[2]
         try {
-            await axios.post('/api/users/completeprocess',{id:org_id,processId:p_id}).then((res)=>{
+            await axios.post('/api/users/completeprocess',{id:o_id,processId:p_id}).then((res)=>{
                 console.log('successful')
                 getProcesses()
             })
@@ -70,7 +85,7 @@ async function Page() {
             {remainingProcesses.map((process)=>{
                 return <div key={process._id}>
                     <p >{process._id}</p>
-                    <button onClick={e=>{e.preventDefault();completeProcess(process._id)}}>complete process</button>
+                    <button onClick={e=>{e.preventDefault();completeProcess(process._id,org_id)}}>complete process</button>
                 </div>  
             })}
         </div>

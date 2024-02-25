@@ -15,8 +15,8 @@ export async function POST(request:NextRequest) {
     try {
         const userId = await getDataFromToken(request)
         const reqBody = await request.json();
-        const {name} = reqBody;
-       const cb = await Collaborative.create({userId:userId,name:name});
+        const {name,desc} = reqBody;
+       const cb = await Collaborative.create({userId:userId,name:name,description:desc});
        await Access.create({collaborativeId:cb._id,userId:userId});
             const response = NextResponse.json({
                 message:'successfully created ',

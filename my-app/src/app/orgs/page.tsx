@@ -4,9 +4,12 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+
 function Page() {
   const [collaborativeStorages, setCollaborativeStorages] = useState([]);
   const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
+
 
   const getAllStorages = async () => {
     try {
@@ -24,7 +27,7 @@ function Page() {
       return;
     }
     try {
-      axios.post("/api/users/createorganization", { name }).then((res) => {
+      axios.post("/api/users/createorganization", { name,desc }).then((res) => {
         getAllStorages();
       });
     } catch (error) {
@@ -35,6 +38,7 @@ function Page() {
   useEffect(() => {
     getAllStorages();
   }, []);
+
 
   return (
     <div>
@@ -83,8 +87,10 @@ function Page() {
                 <textarea
                   rows={4}
                   cols={50}
+                  value={desc}
                   placeholder="Enter a brief description"
                   className="py-2 mt-2 bg-[#1e293b] text-[#8f9eb3] text-left p-2 rounded-md w-[80%] px-6"
+                  onChange={e=>{setDesc(e.target.value)}}
                 />
 
                 <button

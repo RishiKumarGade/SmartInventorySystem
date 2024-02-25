@@ -13,6 +13,11 @@ import {
   } from "@/components/ui/dialog"
   import { Input } from "@/components/ui/input"
   import { Label } from "@/components/ui/label"
+  import { io } from "socket.io-client";
+
+
+
+const socket = io("http://localhost:3001")
   
 function page({params}) {
     const org_id = params.id
@@ -22,15 +27,32 @@ function page({params}) {
     const [items,setItems] = useState([]);
     const [processes,setProcesses]  = useState([]);
 
+    const joinRoom = () => {
+        if (org_id !== "") {
+            socket.emit("join_room", { id:org_id  });
+        }
+      }
+
+      useEffect(() =>{
+        joinRoom();
+      },[org_id])
+
     useEffect(()=>{
         getItems()
         getProcesses()
     },[])
 
+
+    useEffect(()=>{
+        socket.on("UPDATED_RESPONSE",()=>{
+            getItems()
+            getProcesses()
+        })
+    },[socket])
+
     const getItems = async()=>{
         try {
             await axios.post('/api/users/getitems',{id:org_id}).then((res)=>{
-                
                 setItems(res.data.items);
             })
         } catch (error) {
