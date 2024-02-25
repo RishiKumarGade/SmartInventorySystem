@@ -19,7 +19,6 @@ export async function GET(request:NextRequest) {
         for(var i = 0; i < accesses.length; i++) {
             await Collaborative.findOne({userId:userId,_id:accesses[i].collaborativeId}).then(collaborative =>{
                 collaborativeStorages.push(collaborative)
-                console.log(collaborativeStorages)
             })
         }
         
